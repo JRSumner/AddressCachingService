@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace AddressCachingService.Controllers
 {
@@ -28,6 +29,29 @@ namespace AddressCachingService.Controllers
 				Summary = Summaries[Random.Shared.Next(Summaries.Length)]
 			})
 			.ToArray();
+		}
+	}
+
+	[ApiController]
+	[Route("[controller]")]
+	public class AddressController : ControllerBase
+	{
+		private static readonly string[] Summaries = new[]
+		{
+			"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+		};
+
+		private readonly ILogger<AddressController> _logger;
+
+		public AddressController(ILogger<AddressController> logger)
+		{
+			_logger = logger;
+		}
+
+		[HttpGet(Name = "GetAddresses")]
+		public string Get()
+		{
+			return "Test";
 		}
 	}
 }

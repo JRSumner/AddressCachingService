@@ -19,7 +19,7 @@ public class DatabaseUtils
 		CreateAddressCacheTable();
 	}
 
-	private string GetConnectionString()
+	public string GetConnectionString()
 	{
 		return $"Data Source={_dbFilePath}";
 	}
@@ -33,7 +33,10 @@ public class DatabaseUtils
 		{
 			connection.Open();
 			cmd.CommandText =
-				"CREATE TABLE \"AddressCache\" (\r\n\t\"Id\"\tINTEGER,\r\n\t\"Address_Line_1\"\tTEXT,\r\n\t\"Address_Line_2\"\tTEXT,\r\n\t\"Address_Line_3\"\tTEXT,\r\n\t\"Address_Line_4\"\tTEXT,\r\n\t\"Address_Line_5\"\tTEXT,\r\n\t\"Postal_Code\"\tTEXT NOT NULL,\r\n\t\"Building_Number\"\tTEXT,\r\n\t\"Building_Name\"\tTEXT,\r\n\t\"County\"\tTEXT,\r\n\t\"City\"\tTEXT,\r\n\t\"Country_Name\"\tTEXT,\r\n\t\"Company\"\tTEXT,\r\n\t\"PO_Box_Number\"\tTEXT,\r\n\t\"Type\"\tINTEGER,\r\n\t\"Created\"\tTEXT,\r\n\tPRIMARY KEY(\"Id\")\r\n);";
+				"CREATE TABLE AddressCache (Id INTEGER,Address_Line_1 TEXT, Address_Line_2 TEXT, Address_Line_3 TEXT, " +
+				"Address_Line_4 TEXT, Address_Line_5 TEXT, Postal_Code TEXT NOT NULL, Building_Number TEXT, " +
+				"Building_Name TEXT, County TEXT, City TEXT,Country_Name TEXT, Company TEXT, PO_Box_Number TEXT, " +
+				"Type STRING, Created TEXT, PRIMARY KEY(Id));";
 			cmd.ExecuteNonQuery();
 		}
 		catch (Exception e)

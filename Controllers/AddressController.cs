@@ -1,4 +1,5 @@
-﻿using AddressCachingService.Database;
+﻿using System.Net;
+using AddressCachingService.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AddressCachingService.Controllers;
@@ -8,18 +9,32 @@ namespace AddressCachingService.Controllers;
 public class AddressController : ControllerBase
 {
 	private readonly ILogger<AddressController> _logger;
-	private DataAccess _dataAccess;
+	private readonly AddressService _addressService;
 
 	public AddressController(ILogger<AddressController> logger)
 	{
 		_logger = logger;
-		_dataAccess = new DataAccess();
+		_addressService = new AddressService();
 	}
 
 	[HttpGet(Name = "GetAddresses")]
-	public string Get()
+	public IActionResult Get(string postcode)
 	{
-		_dataAccess.GetAddressesByPostcode("");
-		return "Test";
+		try
+		{
+			var addressList = _addressService.GetAddressesByPostcode(postcode);
+
+			if (addressList.Count <= 0)
+				return BadRequest($"Unable to obtain any addresses using postcode:{postcode}");
+
+			var jsonResult = Newtonsoft.Json.JsonConvert.SerializeObject(addressList);
+			return Ok(jsonResult);
+
+		}
+		catch (Exception)
+		{
+			return StatusCode((int)HttpStatusCode.InternalServerError,
+				"An error occurred while processing the request.");
+		}
 	}
 }
